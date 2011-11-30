@@ -1,0 +1,28 @@
+.ConnectionInspector {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+
+    border: 3px solid hsla(195,0%,53%, 0.8);
+
+    /* while in some sort of observing mode */
+    pointer-events: none;
+
+    -webkit-transition: all 200ms ease-in-out;
+}
+
+.ConnectionInspector canvas {
+    opacity: 0;
+}
+
+.ConnectionInspector.enabled {
+    border-color: hsla(195,96%,53%, 0.8);
+    background-color: hsla(0,0%,100%,0.6);
+}
+
+.ConnectionInspector.enabled canvas {
+    opacity: 1;
+}
