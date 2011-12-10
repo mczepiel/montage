@@ -12,17 +12,29 @@
     pointer-events: none;
 
     -webkit-transition: all 200ms ease-in-out;
-}
-
-.ConnectionInspector canvas {
     opacity: 0;
 }
 
 .ConnectionInspector.enabled {
+    opacity: 1;
+
     border-color: hsla(195,96%,53%, 0.8);
     background-color: hsla(0,0%,100%,0.6);
 }
 
-.ConnectionInspector.enabled canvas {
-    opacity: 1;
+
+.ConnectionInspector .cursorInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.2em;
+    background: hsl(0,0%,100%);
+}
+
+.ConnectionInspector.enabled .cursorInfo {
+    pointer-events: auto;
+}
+
+.ConnectionInspector .bindingInfo {
+    font-weight: bold;
 }

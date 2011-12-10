@@ -16,6 +16,12 @@ exports.ConnectionInspector = Montage.create(Component, {
 
     deserializedFromTemplate: {
         value: function() {
+            this.init();
+        }
+    },
+
+    init: {
+        value: function() {
             this.element = document.createElement("div");
             document.addEventListener("keydown", this, false);
         }
@@ -64,17 +70,42 @@ exports.ConnectionInspector = Montage.create(Component, {
     willDistributeEvent: {
         value: function(evt) {
 
-            // Allow the activation toggle keystroke through
+            // Allow the activation toggle keystroke through (ctrl+shift+d)
             if ("keydown" === evt.type && evt.ctrlKey && evt.shiftKey && 68 === evt.keyCode) {
                 return;
             }
 
-            if (this.enabled) {
-                evt.stopImmediatePropagation();
-                evt.preventDefault();
+            // Let bindings continue to work
+            // TODO limit it to bindings involving the debugger system
+            if (evt.type.match(/change/)) {
+                return;
+            }
 
-                if ("mousedown" === evt.type) {
-                    this.inspectedObject = this.nearestComponentToElement(evt.target);
+
+
+            if (this.enabled) {
+
+                console.log("")
+                console.log("willDistribute", evt.type)
+                var eventOnInspector = false,
+                target = evt.target._element ? evt.target._element : event.target;
+
+                while (!eventOnInspector && target && target.parentNode && target !== document.documentElement) {
+
+                    if (target === this.element) {
+                        eventOnInspector = true;
+                    }
+
+                    target = target.parentNode;
+                }
+
+                if (!eventOnInspector) {
+                    evt.stopImmediatePropagation();
+                    evt.preventDefault();
+
+                    if ("mousedown" === evt.type) {
+                        this.inspectedObject = this.nearestComponentToElement(evt.target);
+                    }
                 }
             }
         }
@@ -93,10 +124,38 @@ exports.ConnectionInspector = Montage.create(Component, {
                return;
            }
 
+           this._boundProperties = null;
+
            this._inspectedObject = value;
            this.needsDraw = true;
+
+           //TODO put in state to respond to component hierarchy traversal
        }
    },
+
+    _boundProperties:{
+        value:null
+    },
+
+    boundProperties:{
+        dependencies:["inspectedObject"],
+        get:function () {
+            if (!this._boundProperties && this.inspectedObject && this.inspectedObject._bindingDescriptors) {
+                this._boundProperties = Object.keys(this.inspectedObject._bindingDescriptors).map(function (key) {
+                    return {"sourcePropertyPath": key, "bindingDescriptor": this[key]};
+                }, this.inspectedObject._bindingDescriptors)
+            }
+            return this._boundProperties;
+        }
+    },
+
+    handleParentButtonAction: {
+        value: function() {
+            if (this.inspectedObject && this.inspectedObject.parentComponent) {
+                this.inspectedObject = this.inspectedObject.parentComponent;
+            }
+        }
+    },
 
     willDraw: {
         value: function() {

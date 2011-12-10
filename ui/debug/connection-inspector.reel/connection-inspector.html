@@ -9,21 +9,136 @@
     <title>ConnectionInspector</title>
     <link rel="stylesheet" type="text/css" href="connection-inspector.css">
     <script type="text/montage-serialization">
-{
-    "owner": {
-        "module": "montage/ui/debug/connection-inspector.reel",
-        "name": "ConnectionInspector",
-        "properties": {
-            "element": {"#": "connectionInspector"},
-            "_connectionCanvas": {"#": "connectionCanvas"}
+        {
+            "owner": {
+                "module": "montage/ui/debug/connection-inspector.reel",
+                "name": "ConnectionInspector",
+                "properties": {
+                    "element": {"#": "connectionInspector"},
+                    "_connectionCanvas": {"#": "connectionCanvas"}
+                }
+            },
+
+            "metadataTitleConverter": {
+                "module": "montage/ui/debug/metadata-converter",
+                "name": "MetadataConverter",
+                "properties": {
+                    "propertyName": "objectName"
+                }
+            },
+
+            "componentTitle" : {
+                "module": "montage/ui/dynamic-text.reel",
+                "name": "DynamicText",
+                "properties": {
+                    "element": {"#": "componentTitle"}
+                },
+                "bindings": {
+                    "value": {
+                        "boundObject": {"@": "owner"},
+                        "boundObjectPropertyPath": "inspectedObject",
+                        "oneway": true,
+                        "converter": {"@": "metadataTitleConverter"}
+                    }
+                }
+            },
+
+            "parentButton": {
+                "prototype": "montage/ui/button.reel",
+                "properties": {
+                    "element": {"#": "parentButton"},
+                    "identifier": "parentButton"
+                },
+                "listeners": [
+                    {
+                        "type": "action",
+                        "listener": {"@": "owner"},
+                        "capture": false
+                    }
+                ]
+            },
+
+            "boundPropertiesRepetition" : {
+                "module": "montage/ui/repetition.reel",
+                "name": "Repetition",
+                "properties": {
+                    "element": {"#": "boundPropertiesRepetition"}
+                },
+                "bindings": {
+                    "objects": {
+                        "boundObject": {"@": "owner"},
+                        "boundObjectPropertyPath": "boundProperties",
+                        "oneway": true
+                    }
+                }
+            },
+
+            "sourcePropertyPath" : {
+                "module": "montage/ui/dynamic-text.reel",
+                "name": "DynamicText",
+                "properties": {
+                    "element": {"#": "sourcePropertyPath"}
+                },
+                "bindings": {
+                    "value": {
+                        "boundObject": {"@": "boundPropertiesRepetition"},
+                        "boundObjectPropertyPath": "objectAtCurrentIteration.sourcePropertyPath",
+                        "oneway": true
+                    }
+                }
+            },
+
+            "boundObjectName" : {
+                "module": "montage/ui/dynamic-text.reel",
+                "name": "DynamicText",
+                "properties": {
+                    "element": {"#": "boundObjectName"}
+                },
+                "bindings": {
+                    "value": {
+                        "boundObject": {"@": "boundPropertiesRepetition"},
+                        "boundObjectPropertyPath": "objectAtCurrentIteration.bindingDescriptor.boundObject",
+                        "oneway": true,
+                        "converter": {"@": "metadataTitleConverter"}
+                    }
+                }
+            },
+
+            "boundPropertyPath" : {
+                "module": "montage/ui/dynamic-text.reel",
+                "name": "DynamicText",
+                "properties": {
+                    "element": {"#": "boundPropertyPath"}
+                },
+                "bindings": {
+                    "value": {
+                        "boundObject": {"@": "boundPropertiesRepetition"},
+                        "boundObjectPropertyPath": "objectAtCurrentIteration.bindingDescriptor.boundObjectPropertyPath",
+                        "oneway": true
+                    }
+                }
+            }
         }
-    }
-}
     </script>
 
 </head>
 <body>
 <div id="connectionInspector" class="ConnectionInspector">
+
+    <div id="cursorInfo" class="cursorInfo">
+        <h1>Object: <span data-montage-id="componentTitle"></span></h1>
+
+        <button data-montage-id="parentButton" class="btn text">Parent ⬆</button>
+
+        <h2>Bound Properties</h2>
+        <ul data-montage-id="boundPropertiesRepetition" class="boundPropertiesRepetition">
+            <li>
+                <span data-montage-id="sourcePropertyPath" class="bindingInfo"></span> to <span data-montage-id="boundObjectName" class="bindingInfo"></span> at <span data-montage-id="boundPropertyPath" class="bindingInfo"></span>
+            </li>
+        </ul>
+
+    </div>
+
     <canvas id="connectionCanvas"></canvas>
 </div>
 </body>
