@@ -18,7 +18,9 @@
                 "name": "Loader",
                 "properties": {
                     "mainModule": "card.reel",
-                    "mainName": "Card"
+                    "mainName": "Card",
+                    "minimumLoadingDuration": 0,
+                    "minimumBootstrappingDuration": 2000
                 }
             }
         }
@@ -26,11 +28,27 @@
 
     <style type="text/css">
 
+        body {
+            background-color: #E8D9B2;
+        }
+
         #montage-app-bootstrapper {
-            display: none;
+            opacity: 0;
+            -webkit-transition: opacity 1s ease-in;
+            -webkit-transition-delay: 500ms;
         }
         .montage-app-bootstrapping #montage-app-bootstrapper {
-            display: block;
+            opacity: 1;
+            display: -webkit-box;
+            -webkit-box-orient: horizontal;
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
         }
 
         #montage-app-loader {
@@ -41,10 +59,14 @@
         }
 
         .main {
-            display: none;
+            opacity: 0;
+            -webkit-transition: opacity 3s ease-in;
+            pointer-events: none;
         }
+
         .montage-app-loaded .main {
-            display: block;
+            opacity: 1;
+            pointer-events: auto;
         }
 
     </style>
@@ -52,12 +74,8 @@
 </head>
 <body>
     <div id="montage-app-bootstrapper">
-        <h1>Bootstrapper</h1>
-        <p>This is the bootstrapper content which will now be shown for at least <strong>1500ms</strong>.</p>
+        <img src="images/candy-ani.gif" alt="Loading…">
     </div>
-    <div id="montage-app-loader">
-        <h1>Loader</h1>
-        <p>This is the loader content which will now be shown for at least <strong>2000ms</strong>.</p>
-    </div>
+    <div id="montage-app-loader"></div>
 </body>
 </html>
