@@ -50,6 +50,7 @@
     -webkit-transform: rotate3d(1,0,0,0) translate3d(0, 0, 1px);
     -webkit-transition: 1s -webkit-transform;
     -webkit-backface-visibility: hidden;
+    cursor: pointer;
 }
 .scene .overlay {
     position: absolute;
