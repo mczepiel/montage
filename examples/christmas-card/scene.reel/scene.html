@@ -20,6 +20,14 @@
                     "ballRight": {"#": "ball-right"}
                 }
             },
+            "message": {
+                "module": "montage/ui/image.reel",
+                "name": "Image",
+                "properties": {
+                    "element": {"#": "message"},
+                    "src": "images/message-1.gif"
+                }
+            },
             "frontButton": {
                 "module": "montage/ui/button.reel",
                 "name": "Button",
@@ -84,7 +92,7 @@
                 <div id="inner-button" class="inner-button button"></div>
             </div>
             <div class="inner-bottom-page">
-                <img class="message" src="images/message-1.gif" alt="May the peace and joy of the holiday season be with you throughout the coming year, the Montage team">
+                <img id="message" class="message">
                 <div class="shadow"></div>
             </div>
             <div class="tree"></div>
