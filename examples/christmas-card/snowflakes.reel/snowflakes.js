@@ -118,7 +118,6 @@ exports.Snowflakes = Montage.create(Component, {
                 element = this._snowflakeElements[id],
                 i;
 
-            // if ((y>0?z-y*this._ly:z+y*this._ly)>this._ty) {
 			if ((y>0) && ((z-y*this._ly)>this._ty)) {
                 this.snowflakes[id].y = -this.snowflakes[id].y;
                 y = this.snowflakes[id].y;
