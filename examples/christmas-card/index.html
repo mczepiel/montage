@@ -63,71 +63,55 @@
             pointer-events: auto;
         }
 
+
         #candy {
             position: relative;
             width: 100px;
             height: 150px;
-            -webkit-animation: candy 8s linear infinite;
+            -webkit-animation: candy 16s linear infinite;
         }
+        
         @-webkit-keyframes candy {
-              0% { -webkit-transform: rotate(0); }
-            100% { -webkit-transform: rotate(-360deg); }
+              0% { -webkit-transform: rotate(30deg); }
+            100% { -webkit-transform: rotate(-330deg); }
         }
-
-        #candy div {
+        
+        #candy > .shape {
             position: absolute;
             width: inherit;
             height: inherit;
-        }
-
-        #candy > .shape {
             background: white;
             -webkit-mask-image: url(images/candy-mask.png);
         }
 
-        #candy > .shape > .bar {
-            background: -webkit-linear-gradient(90deg, white 0%, white 50%, red 50%);
-            background-size: 150px 30px;
-            -webkit-transform: rotate(-30deg) skew(-30deg) translate(50px, 42px) ;
-            -webkit-animation: bar 1s linear infinite;
-        }
-        @-webkit-keyframes bar {
-              0% { background-position: 0 13px; }
-            100% { background-position: 0 -17px; }
-        }
-
-        #candy > .shape > .circle {
-            width: 14px;
-            height: 80px;
-            background: red;
-            top: 0px;
-            left: 42px;
-            -webkit-animation: circle 8s linear infinite;
-        }
-        #candy > .shape > .circle > .spike {
+        #candy > .shape > .stripe {
             position: absolute;
-            display: block;
-            width: 14px;
-            height: 80px;
+            width: 50px;
+            height: 15px;
             background: red;
+            -webkit-animation: stripe 4s linear infinite;
+            -webkit-transform-origin: left center;
         }
-        #candy > .shape > .circle > .spike:nth-child(1) {
-            -webkit-transform: rotate(45deg);
+        
+        #candy > .shape > .stripe:nth-child(1) { -webkit-animation-delay: 0s; }
+        #candy > .shape > .stripe:nth-child(2) { -webkit-animation-delay: -.5s; }
+        #candy > .shape > .stripe:nth-child(3) { -webkit-animation-delay: -1s; }
+        #candy > .shape > .stripe:nth-child(4) { -webkit-animation-delay: -1.5s; }
+        #candy > .shape > .stripe:nth-child(5) { -webkit-animation-delay: -2s; }
+        #candy > .shape > .stripe:nth-child(6) { -webkit-animation-delay: -2.5s; }
+        #candy > .shape > .stripe:nth-child(7) { -webkit-animation-delay: -3s; }
+        #candy > .shape > .stripe:nth-child(8) { -webkit-animation-delay: -3.5s; }
+        
+        @-webkit-keyframes stripe {
+              0% { -webkit-transform: translate(50px, 180px) rotate(-30deg); }
+             56% { -webkit-transform: translate(50px,  30px) rotate(-30deg); }
+            100% { -webkit-transform: translate(50px,  30px) rotate(-210deg); }
         }
-
-        #candy > .shape > .circle > .spike:nth-child(2) {
-            -webkit-transform: rotate(90deg);
-        }
-
-        #candy > .shape > .circle > .spike:nth-child(3) {
-            -webkit-transform: rotate(135deg);
-        }
-
-        @-webkit-keyframes circle {
-              0% { -webkit-transform: rotate(0); }
-            100% { -webkit-transform: rotate(-360deg); }
-        }
+        
         #candy .sh {
+            position: absolute;
+            width: inherit;
+            height: inherit;
             background: url(images/candy-sh.png);
         }
 
@@ -138,13 +122,14 @@
     <div id="montage-app-bootstrapper">
         <div id="candy">
             <div class="shape">
-                <div class="circle">
-                    <span class="spike"></span>
-                    <span class="spike"></span>
-                    <span class="spike"></span>
-                    <span class="spike"></span>
-                </div>
-                <div class="bar"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
+                <div class="stripe"></div>
             </div>
             <div class="sh"></div>
         </div>
