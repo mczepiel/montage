@@ -25,6 +25,33 @@
                 "properties": {
                     "element": {"#": "main"}
                 }
+            },
+
+            "preloader": {
+                "module": "preloader.reel",
+                "name": "Preloader",
+                "properties": {
+                    "element": {"#": "preloader"},
+                    "images": [
+                        "images/arrow.png",
+                        "images/background-highlight.png",
+                        "images/background.jpg",
+                        "images/ball-shadow.png",
+                        "images/ball.png",
+                        "images/candy-mask.png",
+                        "images/candy-sh.png",
+                        "images/front-page-background.jpg",
+                        "images/inner-fold-background.jpg",
+                        "images/merry-christmas.png",
+                        "images/message-1.gif",
+                        "images/montage-logo.gif",
+                        "images/present.jpg",
+                        "images/shadow.png",
+                        "images/snowflakes.png",
+                        "images/tree-shape.png",
+                        "images/tree.gif"
+                    ]
+                }
             }
         }
     </script>
@@ -32,9 +59,9 @@
 <body>
     <div id="main" class="main">
         <div class="viewport">
-            <div id="scene">
-            </div>
+            <div id="scene"></div>
         </div>
+        <div id="preloader"></div>
     </div>
 </body>
 </html>
