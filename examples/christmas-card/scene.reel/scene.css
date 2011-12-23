@@ -53,6 +53,11 @@
     cursor: pointer;
     outline: none;
 }
+
+.scene .front-page:hover {
+    -webkit-transform: rotate3d(1,0,0,0) translate3d(0, 0, 20px);
+}
+
 .scene .overlay {
     position: absolute;
     top: 311px;
