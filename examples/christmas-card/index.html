@@ -34,7 +34,7 @@
 
         #montage-app-bootstrapper {
             opacity: 0;
-            -webkit-transition: opacity 1s ease-in;
+            -webkit-transition: opacity 500ms ease-in;
             -webkit-transition-delay: 500ms;
         }
         .montage-app-bootstrapping #montage-app-bootstrapper,
@@ -54,7 +54,7 @@
 
         .main {
             opacity: 0;
-            -webkit-transition: opacity 3s ease-in;
+            -webkit-transition: opacity 750ms ease-in;
             pointer-events: none;
         }
 
@@ -70,12 +70,12 @@
             height: 150px;
             -webkit-animation: candy 16s linear infinite;
         }
-        
+
         @-webkit-keyframes candy {
               0% { -webkit-transform: rotate(30deg); }
             100% { -webkit-transform: rotate(-330deg); }
         }
-        
+
         #candy > .shape {
             position: absolute;
             width: inherit;
@@ -92,7 +92,7 @@
             -webkit-animation: stripe 4s linear infinite;
             -webkit-transform-origin: left center;
         }
-        
+
         #candy > .shape > .stripe:nth-child(1) { -webkit-animation-delay: 0s; }
         #candy > .shape > .stripe:nth-child(2) { -webkit-animation-delay: -.5s; }
         #candy > .shape > .stripe:nth-child(3) { -webkit-animation-delay: -1s; }
@@ -101,13 +101,13 @@
         #candy > .shape > .stripe:nth-child(6) { -webkit-animation-delay: -2.5s; }
         #candy > .shape > .stripe:nth-child(7) { -webkit-animation-delay: -3s; }
         #candy > .shape > .stripe:nth-child(8) { -webkit-animation-delay: -3.5s; }
-        
+
         @-webkit-keyframes stripe {
               0% { -webkit-transform: translate(50px, 180px) rotate(-30deg); }
              56% { -webkit-transform: translate(50px,  30px) rotate(-30deg); }
             100% { -webkit-transform: translate(50px,  30px) rotate(-210deg); }
         }
-        
+
         #candy .sh {
             position: absolute;
             width: inherit;
