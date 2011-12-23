@@ -68,13 +68,92 @@
             opacity: 1;
             pointer-events: auto;
         }
+        
+        #candy {
+            position: relative;
+            width: 100px;
+            height: 150px;
+            -webkit-animation: candy 8s linear infinite;
+        }
+        @-webkit-keyframes candy {
+              0% { -webkit-transform: rotate(0); }
+            100% { -webkit-transform: rotate(-360deg); }
+        }
+        
+        #candy div {
+            position: absolute;
+            width: inherit;
+            height: inherit;
+        }
+
+        #candy > .shape {
+            background: white;
+            -webkit-mask-image: url(images/candy-mask.png);
+        }
+
+        #candy > .shape > .bar {
+            background: -webkit-linear-gradient(90deg, white 0%, white 50%, red 50%);
+            background-size: 150px 30px;
+            -webkit-transform: rotate(-30deg) skew(-30deg) translate(50px, 42px) ;
+            -webkit-animation: bar 1s linear infinite;
+        }
+        @-webkit-keyframes bar {
+              0% { background-position: 0 13px; }
+            100% { background-position: 0 -17px; }
+        }
+        
+        #candy > .shape > .circle {
+            width: 14px;
+            height: 80px;
+            background: red;
+            top: 0px;
+            left: 42px;
+            -webkit-animation: circle 8s linear infinite;
+        }
+        #candy > .shape > .circle > .spike {
+            position: absolute;
+            display: block;
+            width: 14px;
+            height: 80px;
+            background: red;
+        }
+        #candy > .shape > .circle > .spike:nth-child(1) {
+            -webkit-transform: rotate(45deg);
+        }
+
+        #candy > .shape > .circle > .spike:nth-child(2) {
+            -webkit-transform: rotate(90deg);
+        }
+
+        #candy > .shape > .circle > .spike:nth-child(3) {
+            -webkit-transform: rotate(135deg);
+        }
+        
+        @-webkit-keyframes circle {
+              0% { -webkit-transform: rotate(0); }
+            100% { -webkit-transform: rotate(-360deg); }
+        }
+        #candy .sh {
+            background: url(images/candy-sh.png);
+        }
 
     </style>
 
 </head>
 <body>
     <div id="montage-app-bootstrapper">
-        <img src="images/candy-ani.gif" alt="Loading…">
+        <div id="candy">
+            <div class="shape">
+                <div class="circle">
+                    <span class="spike"></span>
+                    <span class="spike"></span>
+                    <span class="spike"></span>
+                    <span class="spike"></span>
+                </div>
+                <div class="bar"></div>
+            </div>
+            <div class="sh"></div>
+        </div>
     </div>
     <div id="montage-app-loader"></div>
 </body>
