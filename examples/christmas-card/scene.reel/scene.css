@@ -51,6 +51,7 @@
     -webkit-transition: 1s -webkit-transform;
     -webkit-backface-visibility: hidden;
     cursor: pointer;
+    outline: none;
 }
 .scene .overlay {
     position: absolute;

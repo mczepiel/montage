@@ -87,7 +87,7 @@ exports.Snowflakes = Montage.create(Component, {
             while (i<60) {
                 x = Math.random()*1600-800;
                 y = Math.random()*1600-800;
-                z = Math.random()*800;
+                z = Math.random()*800-500;
                 if ( ((x>0?z-x*lx:z+x*lx)<tx) && ((y>0?z-y*this._ly:z+y*this._ly)<this._ty) ) {
                     snowflakes[i] = {};
                     snowflakes[i].x = x;
