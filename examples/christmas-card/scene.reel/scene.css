@@ -45,17 +45,13 @@
     margin-left: -400px;
     width: 800px;
     height: 450px;
-    background: url(../images/front-page-background.jpg);
+    background: #209ec9 url(../images/front-page-background.jpg);
     -webkit-transform-origin: 0 0 0;
     -webkit-transform: rotate3d(1,0,0,0) translate3d(0, 0, 1px);
     -webkit-transition: 1s -webkit-transform;
     -webkit-backface-visibility: hidden;
     cursor: pointer;
     outline: none;
-}
-
-.scene .front-page:hover {
-    -webkit-transform: rotate3d(1,0,0,0) translate3d(0, 0, 20px);
 }
 
 .scene .overlay {
@@ -107,6 +103,7 @@
     top: 14px;
 }
 .scene .inner-bottom-page {
+    opacity:0;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -117,8 +114,13 @@
     background: url(../images/montage-logo.gif) 321px 303px no-repeat, url(../images/inner-fold-background.jpg) 0 -450px no-repeat;
     -webkit-transform-origin: 0 450px 0;
     -webkit-transform:  translate3d(0, 0, .99px);
-    -webkit-transition: 1s -webkit-transform;
+    -webkit-transition-property: -webkit-transform opacity;
+    -webkit-transition-duration: 1s;
     overflow: hidden;
+}
+
+.scene.openCard .inner-bottom-page {
+    opacity:1;
 }
 .scene .message {
     margin-left: 143px;
@@ -150,7 +152,18 @@
     -webkit-transform-origin: 0 376px 0;
     -webkit-transform:  translate3d(0, 0, .99px) rotateX(-180deg);
     -webkit-transition: 1s -webkit-transform;
+    -webkit-backface-visibility: hidden;
 }
+
+.scene .present.bottom, .scene .present.bottom .top {
+    opacity:0;
+
+}
+
+.scene.openCard .present.bottom, .scene.openCard .present.bottom .top {
+    opacity:1 ;
+}
+
 .scene .present.bottom {
     position: absolute;
     top: 50%;
@@ -163,7 +176,8 @@
     background-position: 0 -78px;
     -webkit-transform-origin: 0 78px 0;
     -webkit-transform:  translate3d(0, -147px, 0px) rotateX(-180deg);
-    -webkit-transition: 1s -webkit-transform;
+    -webkit-transition: -webkit-transform opacity;
+    -webkit-transition-duration: 1s;
     -webkit-backface-visibility: hidden;
     -webkit-transform-style: preserve-3d;
 }
@@ -177,7 +191,8 @@
     background: url(../images/present.jpg);
     -webkit-transform-origin: 0 78px 0;
     -webkit-transform:  translate3d(0, -77px, 1px) rotateX(180deg);
-    -webkit-transition: 1s -webkit-transform;
+    -webkit-transition: -webkit-transform opacity;
+    -webkit-transition-duration: 1s;
     -webkit-backface-visibility: hidden;
 }
 .scene .ball-shadow {
