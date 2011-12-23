@@ -68,7 +68,7 @@ exports.Snowflakes = Montage.create(Component, {
         enuemrable: false,
         value: function () {
             var i = 0,
-                snowflake = [],
+                snowflakes = [],
                 mod = Math.sqrt(this._perspective * this._perspective + this._width * this._width * .25),
                 mod2 = Math.sqrt(this._perspective * this._perspective + this._height * this._height * .25),
                 leftX = -this._perspective / mod,
@@ -87,19 +87,20 @@ exports.Snowflakes = Montage.create(Component, {
             while (i<60) {
                 x = Math.random()*1600-800;
                 y = Math.random()*1600-800;
-                z = Math.random()*800-500;
+                z = Math.random()*800;
                 if ( ((x>0?z-x*lx:z+x*lx)<tx) && ((y>0?z-y*this._ly:z+y*this._ly)<this._ty) ) {
-                    snowflake[i] = {};
-                    snowflake[i].x = x;
-                    snowflake[i].y = y;
-                    snowflake[i].z = z;
-                    snowflake[i].time = 0;
-                    snowflake[i].opacity = (Math.random() + .4) / 1.4;
+                    snowflakes[i] = {};
+                    snowflakes[i].x = x;
+                    snowflakes[i].y = y;
+                    snowflakes[i].z = z;
+                    snowflakes[i].blur = null;
+                    snowflakes[i].time = 0;
+                    snowflakes[i].opacity = (Math.random() + .4) / 1.4;
                     i++;
                 }
             }
 
-            this.snowflakes = snowflake;
+            this.snowflakes = snowflakes;
             this._previousTime = new Date().getTime();
         }
     },
@@ -118,11 +119,11 @@ exports.Snowflakes = Montage.create(Component, {
                 element = this._snowflakeElements[id],
                 i;
 
-			if ((y>0) && ((z-y*this._ly)>this._ty)) {
+            if ((y>0) && ((z-y*this._ly)>this._ty)) {
                 this.snowflakes[id].y = -this.snowflakes[id].y;
                 y = this.snowflakes[id].y;
             }
-            blur = Math.abs(Math.floor(z/-10));
+            blur = Math.abs(Math.floor(z/10));
             if (blur<0) {
                 blur = 0;
             } else {
@@ -147,24 +148,29 @@ exports.Snowflakes = Montage.create(Component, {
             var time = new Date().getTime(),
                 time2 = time - this._previousTime,
                 snowflakes = this.snowflakes,
+                length,
                 i;
+
             if (time2>200) {
                 time2 = 200;
             }
             this._previousTime = time;
             this._snowflakeElements = this.snowflakeRepetition.element.querySelectorAll(".snowflake");
-            for (i=0; i<this._snowflakeElements.length; i++) {
-                snowflakes[i].time += time2;
-                snowflakes[i].y += time2 / 60;
-                this.setFlake(
-                    i,
-                    snowflakes[i].x + Math.sin((i+snowflakes[i].time)/(7000+i*200)) * 60,
-                    snowflakes[i].y,
-                    snowflakes[i].z,
-                    Math.sin(i + snowflakes[i].time / 2500) / 3,
-                    i + snowflakes[i].time/7000,
-                    snowflakes[i].opacity
-                );
+            length = this._snowflakeElements.length;
+            if (length > 1) {
+                for (i=0; i<length; i++) {
+                    snowflakes[i].time += time2;
+                    snowflakes[i].y += time2 / 60;
+                    this.setFlake(
+                        i,
+                        snowflakes[i].x + Math.sin((i+snowflakes[i].time)/(7000+i*200)) * 60,
+                        snowflakes[i].y,
+                        snowflakes[i].z,
+                        Math.sin(i + snowflakes[i].time / 2500) / 3,
+                        i + snowflakes[i].time/7000,
+                        snowflakes[i].opacity
+                    );
+                }
             }
             if (this._isAnimating) {
                 this.needsDraw = true;
