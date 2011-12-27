@@ -11,7 +11,7 @@
     margin: 2px;
     width: 2044px;
     height: 2044px;
-    background: url(../images/background.jpg);
+    background: url(images/background.jpg);
 }
 .scene .background:after {
     content: "";
@@ -19,7 +19,7 @@
     width: 128px;
     height: 128px;
     margin: -2px;
-    background: url(../images/background-highlight.png) no-repeat;
+    background: url(images/background-highlight.png) no-repeat;
     -webkit-transform-origin: 0 0 0;
     -webkit-transform: scale3d(16, 16, 1) translate3d(0,0,0.01px);
 }
@@ -31,7 +31,7 @@
     left: 50%;
     margin-top: -243px;
     margin-left: -427px;
-    background: url(../images/shadow.png);
+    background: url(images/shadow.png);
     -webkit-transition: 1s all;
     -webkit-transform-origin: 0 505px 0;
     -webkit-transform: scale3d(1, 1, 1) translate3d(0, 0, .3px);
@@ -45,7 +45,7 @@
     margin-left: -400px;
     width: 800px;
     height: 450px;
-    background: #209ec9 url(../images/front-page-background.jpg);
+    background: #209ec9 url(images/front-page-background.jpg);
     -webkit-transform-origin: 0 0 0;
     -webkit-transform: rotate3d(1,0,0,0) translate3d(0, 0, 1px);
     -webkit-transition: 1s -webkit-transform;
@@ -59,7 +59,7 @@
     top: 311px;
     width: 800px;
     height: 139px;
-    background: url(../images/merry-christmas.png);
+    background: url(images/merry-christmas.png);
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(1px);
     z-index: 1;
@@ -70,7 +70,7 @@
     top: 87px;
     width: 39px;
     height: 39px;
-    background: url(../images/arrow.png);
+    background: url(images/arrow.png);
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(1px);
     opacity: .6;
@@ -91,7 +91,7 @@
     margin-left: -400px;
     width: 800px;
     height: 450px;
-    background: url(../images/inner-fold-background.jpg);
+    background: url(images/inner-fold-background.jpg);
     -webkit-transform-origin: 0 450px 0;
     -webkit-transform:  translate3d(0, -450px, 0px) rotateX(-180deg);
     -webkit-transition: 1s -webkit-transform;
@@ -111,7 +111,7 @@
     margin-left: -400px;
     width: 800px;
     height: 450px;
-    background: url(../images/montage-logo.gif) 321px 303px no-repeat, url(../images/inner-fold-background.jpg) 0 -450px no-repeat;
+    background: url(images/montage-logo.gif) 321px 303px no-repeat, url(images/inner-fold-background.jpg) 0 -450px no-repeat;
     -webkit-transform-origin: 0 450px 0;
     -webkit-transform:  translate3d(0, 0, .99px);
     -webkit-transition-property: -webkit-transform opacity;
@@ -134,7 +134,7 @@
     left: 50%;
     margin-top: -243px;
     margin-left: -427px;
-    background: url(../images/shadow.png);
+    background: url(images/shadow.png);
     -webkit-transition: 1s all;
     -webkit-transform-origin: 0 505px 0;
     -webkit-transform: scale3d(1, 1, 1) translate3d(0, 0, .3px);
@@ -148,7 +148,7 @@
     margin-left: -142px;
     width: 285px;
     height: 376px;
-    background: url(../images/tree.gif) no-repeat, url(../images/tree-shape.png) no-repeat;
+    background: url(images/tree.gif) no-repeat, url(images/tree-shape.png) no-repeat;
     -webkit-transform-origin: 0 376px 0;
     -webkit-transform:  translate3d(0, 0, .99px) rotateX(-180deg);
     -webkit-transition: 1s -webkit-transform;
@@ -172,7 +172,7 @@
     margin-left: -311px;
     width: 90px;
     height: 78px;
-    background: url(../images/present.jpg);
+    background: url(images/present.jpg);
     background-position: 0 -78px;
     -webkit-transform-origin: 0 78px 0;
     -webkit-transform:  translate3d(0, -147px, 0px) rotateX(-180deg);
@@ -188,7 +188,7 @@
     position: absolute;
     width: 90px;
     height: 78px;
-    background: url(../images/present.jpg);
+    background: url(images/present.jpg);
     -webkit-transform-origin: 0 78px 0;
     -webkit-transform:  translate3d(0, -77px, 1px) rotateX(180deg);
     -webkit-transition: -webkit-transform opacity;
@@ -203,7 +203,7 @@
     margin-top: 52px;
     width: 128px;
     height: 90px;
-    background: url(../images/ball-shadow.png);
+    background: url(images/ball-shadow.png);
     -webkit-transform: scale3d(2.2,2.2,1) translate3d(0, 0, .02px);
 }
 .scene .ball-shadow.right {
@@ -218,7 +218,7 @@
     margin-top: 20px;
     width: 142px;
     height: 141px;
-    background: url(../images/ball.png);
+    background: url(images/ball.png);
     -webkit-transform: translate3d(0, 0, 71px) rotate3d(1,0,0,0);
     -webkit-transition: 1s -webkit-transform;
 }
