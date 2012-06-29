@@ -77,7 +77,8 @@ POSSIBILITY OF SUCH DAMAGE.
                 },
                 "bindings": {
                     "container": {"<-": "@owner._canvas"},
-                    "rangeEnd": {"<-": "@owner._width"}
+                    "rangeEnd": {"<-": "@owner._width"},
+                    "enabled": {"<-": "@owner.hasImage"}
                 }
             },
 
@@ -89,7 +90,8 @@ POSSIBILITY OF SUCH DAMAGE.
                 },
                 "bindings": {
                     "container": {"<-": "@owner._canvas"},
-                    "rangeEnd": {"<-": "@owner._height"}
+                    "rangeEnd": {"<-": "@owner._height"},
+                    "enabled": {"<-": "@owner.hasImage"}
                 }
             },
 

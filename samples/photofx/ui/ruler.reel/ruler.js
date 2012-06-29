@@ -35,6 +35,31 @@ var Montage = require("montage").Montage,
 
 exports.Ruler = Montage.create(Component, {
 
+    _enabled: {
+        value: false
+    },
+
+    enabled: {
+        get: function() {
+            return this._enabled;
+        },
+        set: function(value) {
+            if (value === this._enabled) {
+                return;
+            }
+
+            this._enabled = value;
+
+            if (this._isComponentExpanded) {
+                if (this._enabled) {
+                    document.addEventListener("mousemove", this);
+                } else {
+                    document.removeEventListener("mousemove", this);
+                }
+            }
+        }
+    },
+
     _position: {
         value: null
     },
@@ -115,20 +140,31 @@ exports.Ruler = Montage.create(Component, {
 
     prepareForDraw: {
         value: function() {
-            if (window.Touch) {
-                // TODO add touch support
-            } else {
-                document.addEventListener("mousemove", this);
+            if (this._enabled) {
+                if (window.Touch) {
+                    // TODO add touch support
+                } else {
+                    document.addEventListener("mousemove", this);
+                }
             }
         }
     },
 
+    _pagePoint: {
+        distinct: true,
+        value: Point.create()
+    },
+
     handleMousemove: {
         value: function(evt) {
-            var containerPoint = Point.create().init(evt.pageX, evt.pageY);
+            var containerPoint = this._pagePoint;
+            containerPoint.x = evt.pageX;
+            containerPoint.y = evt.pageY;
+
             if (this.container) {
                 containerPoint = dom.convertPointFromPageToNode(this.container, containerPoint);
             }
+
             this.position = containerPoint[this.axis];
         }
     },
@@ -147,41 +183,52 @@ exports.Ruler = Montage.create(Component, {
     draw: {
         value: function() {
 
+            var classList = this.element.classList,
+                position = this.position,
+                rangeStart = this.rangeStart,
+                rangeEnd = this.rangeEnd,
+                savedPosition = this.savedPosition,
+                savedPositionStyle = this.savedPositionText.element.style,
+                positionStyle = this.positionText.element.style,
+                distanceStyle = this.distanceText.element.style,
+                offset,
+                distance = this.distance,
+                savedOffset;
+
             if ("x" === this.axis) {
-                this.element.classList.add("horizontal");
-                this.element.classList.remove("vertical");
+                classList.add("horizontal");
+                classList.remove("vertical");
             } else {
-                this.element.classList.add("vertical");
-                this.element.classList.remove("horizontal");
+                classList.add("vertical");
+                classList.remove("horizontal");
             }
 
+            offset = position > rangeStart ? position : rangeStart;
 
-            var offset = this.position > this.rangeStart ? this.position : this.rangeStart;
-
-            if (null != this.rangeEnd && offset > this.rangeEnd) {
-                offset = this.rangeEnd;
+            if (null != rangeEnd && offset > rangeEnd) {
+                offset = rangeEnd;
             }
 
-            this.positionText.element.style.left = offset + "px";
+            positionStyle.left = offset + "px";
 
-            var savedOffset = this.savedPosition > this.rangeStart ? this.savedPosition : this.rangeStart;
+            savedOffset = savedPosition > rangeStart ? savedPosition : rangeStart;
 
-            if (null != this.rangeEnd && savedOffset > this.rangeEnd) {
-                savedOffset = this.rangeEnd;
+            if (null != rangeEnd && savedOffset > rangeEnd) {
+                savedOffset = rangeEnd;
             }
 
-            this.savedPositionText.element.style.left = savedOffset + "px";
+            savedPositionStyle.left = savedOffset + "px";
 
-            if (null != this.distance) {
-                this.distanceText.element.style.width = Math.abs(this.distance) + "px";
+            if (null != distance) {
+                distanceStyle.width = Math.abs(distance) + "px";
 
-                if (this.distance < 0) {
-                    this.distanceText.element.style.left = offset + "px";
+                if (distance < 0) {
+                    distanceStyle.left = offset + "px";
                 } else {
-                    this.distanceText.element.style.left = savedOffset + "px";
+                    distanceStyle.left = savedOffset + "px";
                 }
             } else {
-                this.distanceText.element.style.width = "0";
+                distanceStyle.width = "0";
             }
         }
     }
