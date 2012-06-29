@@ -257,26 +257,29 @@ exports.PhotoEditor = Montage.create(Component, {
         }
     },
 
+    _pickedPagePoint: {
+        distinct: true,
+        value: Point.create()
+    },
+
     _pickColor: {
         value: function(x, y, end) {
-            var gridExtent = 20,
-                halfGridExtent = 10,
+            var pagePoint = this._pickedPagePoint,
                 canvas = this._canvas,
-                context = canvas.getContext('2d'),
-                canvasPoint = dom.convertPointFromPageToNode(canvas, Point.create().init(x, y)),
-                pickedPixel = context.getImageData(canvasPoint.x, canvasPoint.y, 1, 1),
-                focusGrid = context.getImageData(canvasPoint.x - halfGridExtent, canvasPoint.y - halfGridExtent, gridExtent, gridExtent),
-                colorPickEvent;
+                colorPickEvent,
+                canvasPoint;
+
+            pagePoint.x = x;
+            pagePoint.y = y;
+            canvasPoint = dom.convertPointFromPageToNode(canvas, pagePoint);
 
             colorPickEvent = document.createEvent("CustomEvent");
             colorPickEvent.initCustomEvent(end ? "colorpickend" : "colorpick", true, true, null);
-            //TODO not wrap the color in an array (mobile safari/binding issue) at the time of writing this
-            colorPickEvent.color = [pickedPixel.data[0], pickedPixel.data[1], pickedPixel.data[2], pickedPixel.data[3]];
-            colorPickEvent.focusGrid = focusGrid;
             colorPickEvent.pageX = x;
             colorPickEvent.pageY = y;
             colorPickEvent.canvasX = canvasPoint.x;
             colorPickEvent.canvasY = canvasPoint.y;
+            colorPickEvent.canvas = canvas;
 
             this.dispatchEvent(colorPickEvent);
         }

@@ -59,7 +59,8 @@ POSSIBILITY OF SUCH DAMAGE.
                 },
                 "bindings": {
                     "colorPickerEnabled": {"<-": "@application.preferences.values.showControls", "converter": {"@": "negationConverter"}},
-                    "followPointer": {"<-": "@application.preferences.values.loupeFollowPointer"}
+                    "followPointer": {"<-": "@application.preferences.values.loupeFollowPointer"},
+                    "pointMonitor": {"<-": "@photoEditor.pointMonitorController.selectedObjects.0"}
                 }
             },
             "photoEditor": {

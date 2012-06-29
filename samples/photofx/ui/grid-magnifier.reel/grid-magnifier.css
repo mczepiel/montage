@@ -48,17 +48,14 @@ POSSIBILITY OF SUCH DAMAGE.
 }
 
 .GridMagnifier .loupe {
-    position: static;
+    position: relative;
+    z-index: 1000;
     width: 200px;
     height: 200px;
 
     border: 1px solid hsl(0,0%,80%);
 
-    -webkit-box-shadow: 0 4px 6px hsla(0,0%,0%, 0.4);
-}
-
-.touch .GridMagnifier {
-    -webkit-box-shadow: none;
+    overflow: hidden;
 }
 
 .GridMagnifier.active {
@@ -101,3 +98,23 @@ POSSIBILITY OF SUCH DAMAGE.
 .GridMagnifier .ColorPicker .valueList {
     margin-right: 0;
 }
+
+.GridMagnifier .loupeInfo {
+    position:absolute;
+    z-index: 100;
+    left: 0;
+    top: 0;
+
+    width: 3em;
+    height: 2em;
+
+    background: hsla(0,0%,80%, 0.8);
+
+    padding: 8px 70px 88px 10px;
+
+    font-size: small;
+    border-bottom: none;
+
+    border-radius: 8px;
+}
+

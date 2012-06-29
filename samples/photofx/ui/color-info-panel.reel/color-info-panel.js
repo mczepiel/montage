@@ -87,12 +87,23 @@ exports.ColorInfoPanel = Montage.create(Component, {
         }
     },
 
+    _deferredPickColor: {
+        value: null
+    },
+
     handleColorpick: {
         value: function(event) {
             // a color was picked, update the color for the current selected color picker
             var selectedObject = this.pointMonitorController.getProperty("selectedObjects.0");
             if (selectedObject) {
-                this.pickColor(selectedObject, event.canvasX, event.canvasY, event.color, false);
+
+                var self = this,
+                deferredX = event.canvasX,
+                deferredY = event.canvasY;
+
+                this._deferredPickColor = setTimeout(function() {
+                    self.pickColor(selectedObject, deferredX, deferredY, false);
+                }, 100);
             }
         }
     },
@@ -101,13 +112,14 @@ exports.ColorInfoPanel = Montage.create(Component, {
         value: function(event) {
             var selectedObject = this.pointMonitorController.getProperty("selectedObjects.0");
             if (selectedObject) {
-                this.pickColor(selectedObject, event.canvasX, event.canvasY, event.color, true);
+                clearTimeout(this._deferredPickColor);
+                this.pickColor(selectedObject, event.canvasX, event.canvasY, true);
             }
         }
     },
 
     pickColor: {
-        value: function(monitor, x, y, color, undoable) {
+        value: function(monitor, x, y, undoable) {
 
             // Store the coordinates of the monitor right now, before we pick a color, regardless of whether
             // we want to commit the picked color or not
@@ -115,10 +127,11 @@ exports.ColorInfoPanel = Montage.create(Component, {
                 this._undoColorPickInfo = {x: monitor.x, y: monitor.y};
             }
 
+            var color;
             monitor.x = x;
             monitor.y = y;
 
-            if (!color && (null != x || null != y)) {
+            if (null != x || null != y) {
                 color = this.editor.dataAtPoint(x, y);
             }
             monitor.color = color;
@@ -133,7 +146,7 @@ exports.ColorInfoPanel = Montage.create(Component, {
 
                     // If the new x and y were null, this pickColor cleared a marker, label it as such
                     var undoLabel = (null == x || null == y) ? "clear color marker" : "set color marker";
-                    undoManager.add(undoLabel, this.pickColor, this, monitor, originalX, originalY, null, true);
+                    undoManager.add(undoLabel, this.pickColor, this, monitor, originalX, originalY, true);
                 }
 
                 this._undoColorPickInfo = null;
