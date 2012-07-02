@@ -32,6 +32,7 @@ var Montage = require("montage").Montage;
 var Component = require("montage/ui/component").Component;
 var dom = require("montage/ui/dom");
 var Point = require("montage/core/geometry/point").Point;
+var Promise = require("montage/core/promise").Promise;
 
 var DesaturateEffect = require("core/effect/desaturate-effect").DesaturateEffect;
 var InvertEffect = require("core/effect/invert-effect").InvertEffect;
@@ -46,10 +47,41 @@ exports.PhotoEditor = Montage.create(Component, {
         value: null
     },
 
+    supportsTransferableObjects: {
+        value: false
+    },
+
     didCreate: {
         value: function() {
             this._testCrossOriginCanvas();
+
+            if (Worker) {
+                var worker = new Worker("ui/canvas-worker.js");
+
+                worker.postMessage = worker.webkitPostMessage || worker.postMessage;
+
+                var buffer = new ArrayBuffer(1);
+                try {
+                    worker.postMessage(buffer, [buffer]);
+                } catch(e) {
+                    // ignore, transferable objects not supported
+                } finally {
+                    // buffer will be empty if transferableObjects supported
+                    this.supportsTransferableObjects = !buffer.byteLength;
+                }
+
+                if (this.supportsTransferableObjects) {
+                    this._canvasWorker = worker;
+                    worker.addEventListener("message", this, true);
+                }
+
+            }
+
         }
+    },
+
+    _canvasWorker: {
+        value: null
     },
 
     _testCrossOriginCanvas: {
@@ -285,6 +317,11 @@ exports.PhotoEditor = Montage.create(Component, {
         }
     },
 
+    _deferredOperations: {
+        distinct: true,
+        value: {}
+    },
+
     dataAtPoint: {
         value: function(x, y) {
 
@@ -293,11 +330,48 @@ exports.PhotoEditor = Montage.create(Component, {
             }
 
             var canvas = this._canvas,
-                context = canvas.getContext('2d');
+                self = this,
+                deferredColor = Promise.defer(),
+                data;
 
-            var data = context.getImageData(x, y, 1, 1).data;
-            //TODO not wrap the color in an array (mobile safari/binding issue) at the time of writing this
-            return [data[0], data[1], data[2], data[3]];
+            if (this._canvasWorker) {
+                this._deferredOperations[deferredColor.uuid] = deferredColor;
+                self._canvasWorker.postMessage({"command": "dataAtPoint", "x": x, "y": y, "deferredId": deferredColor.uuid});
+                return deferredColor.promise;
+
+            } else {
+
+                //Safari seems ot have issues with our bindings and Uint8ClampedArrays
+                // I'm normalizing as a regular array for ease of use
+                // TODO sort out this whole thing, this extra array is unnecessary
+                data = canvas.getContext('2d').getImageData(x, y, 1, 1).data
+
+                deferredColor.resolve([data[0], data[1], data[2], data[3]]);
+                return deferredColor.promise;
+            }
+        }
+    },
+
+    captureMessage: {
+        value: function(evt) {
+            var data = evt.data,
+                color;
+
+            if ("dataAtPoint" === data.command) {
+                var deferred = this._deferredOperations[data.deferredId]
+
+                if (!deferred) {
+                    throw "Received result for invalid deferredId: " + data.deferredId;
+                }
+
+                // TODO ame as the other place we normalize a typed array into an array, this isn't always necessary
+                color = data.color;
+                deferred.resolve([color[0], color[1], color[2], color[3]]);
+                this._deferredOperations[data.deferredId] = null;
+
+            } else {
+                throw "PhotoEditor received unexpected message";
+            }
         }
     },
 
@@ -576,6 +650,7 @@ exports.PhotoEditor = Montage.create(Component, {
             }
 
             context.putImageData(imgd, 0, 0);
+            this._sendImageDataToWorker(imgd);
         }
     },
 
@@ -590,6 +665,16 @@ exports.PhotoEditor = Montage.create(Component, {
 
                 this._imageDirty = false;
             }
+        }
+    },
+
+    _sendImageDataToWorker: {
+        value: function(imageData) {
+
+            if (this.supportsTransferableObjects) {
+                this._canvasWorker.postMessage({"command": "imageData", "imageData": imageData});
+            }
+
         }
     }
 

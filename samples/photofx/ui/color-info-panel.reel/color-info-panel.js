@@ -87,23 +87,12 @@ exports.ColorInfoPanel = Montage.create(Component, {
         }
     },
 
-    _deferredPickColor: {
-        value: null
-    },
-
     handleColorpick: {
         value: function(event) {
             // a color was picked, update the color for the current selected color picker
             var selectedObject = this.pointMonitorController.getProperty("selectedObjects.0");
             if (selectedObject) {
-
-                var self = this,
-                deferredX = event.canvasX,
-                deferredY = event.canvasY;
-
-                this._deferredPickColor = setTimeout(function() {
-                    self.pickColor(selectedObject, deferredX, deferredY, false);
-                }, 100);
+                this.pickColor(selectedObject, event.canvasX, event.canvasY, false);
             }
         }
     },
@@ -112,7 +101,6 @@ exports.ColorInfoPanel = Montage.create(Component, {
         value: function(event) {
             var selectedObject = this.pointMonitorController.getProperty("selectedObjects.0");
             if (selectedObject) {
-                clearTimeout(this._deferredPickColor);
                 this.pickColor(selectedObject, event.canvasX, event.canvasY, true);
             }
         }
@@ -127,14 +115,20 @@ exports.ColorInfoPanel = Montage.create(Component, {
                 this._undoColorPickInfo = {x: monitor.x, y: monitor.y};
             }
 
-            var color;
+            var colorPromise;
             monitor.x = x;
             monitor.y = y;
 
             if (null != x || null != y) {
-                color = this.editor.dataAtPoint(x, y);
+
+                colorPromise = this.editor.dataAtPoint(x, y);
+
+                if (colorPromise) {
+                    colorPromise.then(function(result) {
+                        monitor.color = result;
+                    });
+                }
             }
-            monitor.color = color;
 
             // if the color pick is intended to be undoable, add the inverse to the stack
             if (undoable) {
@@ -167,9 +161,22 @@ exports.ColorInfoPanel = Montage.create(Component, {
                 return;
             }
 
+            var colorPromise;
+
+            var acceptColorForMonitor = function(monitor) {
+                return (function(color) {
+                    monitor.color = color;
+                })
+            }
+
             for (i = 0; (iPointMonitor = pointMonitors[i]); i++) {
                 if (null != iPointMonitor.x && null != iPointMonitor.y) {
-                    iPointMonitor.color = editor.dataAtPoint(iPointMonitor.x, iPointMonitor.y);
+
+                    colorPromise = this.editor.dataAtPoint(iPointMonitor.x, iPointMonitor.y);
+
+                    if (colorPromise) {
+                        colorPromise.then(acceptColorForMonitor(iPointMonitor));
+                    }
                 }
             }
 
