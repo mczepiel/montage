@@ -118,3 +118,7 @@ POSSIBILITY OF SUCH DAMAGE.
     border-radius: 8px;
 }
 
+.touch .GridMagnifier .ColorPicker,
+.touch .GridMagnifier .loupeInfo {
+    background: hsl(0,0%,80%);
+}
