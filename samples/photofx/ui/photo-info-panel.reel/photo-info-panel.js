@@ -80,8 +80,9 @@ exports.PhotoInfoPanel = Montage.create(Component, {
 
     handleMouseover: {
         value: function() {
-            if (this.photo) {
-                this._prepareDownload();
+            if (this.photo && this._downloadDirty) {
+                this._needsPrepareDownload = true;
+                this.needsDraw = true;
             }
         }
     },
@@ -95,11 +96,12 @@ exports.PhotoInfoPanel = Montage.create(Component, {
         }
     },
 
-    _prepareDownload: {
-        value: function() {
-            // TODO move this to the draw loop too
-            this._dragProxy.setAttribute("src", this._canvas.toDataURL());
-        }
+    _downloadDirty: {
+        value: true
+    },
+
+    _needsPrepareDownload: {
+        value: false
     },
 
     draw: {
@@ -114,6 +116,7 @@ exports.PhotoInfoPanel = Montage.create(Component, {
                 var thumbnailContext = this._canvas.getContext("2d");
                     thumbnailContext.putImageData(originalData, 0, 0);
                 this._modifiedCanvas = null;
+                this._downloadDirty = true;
             }
 
             if (this._photoChanged) {
@@ -123,6 +126,13 @@ exports.PhotoInfoPanel = Montage.create(Component, {
                     this._dragProxy.removeAttribute("src");
                 }
                 this._photoChanged = false;
+                this._downloadDirty = true;
+            }
+
+            if (this._downloadDirty && this._needsPrepareDownload) {
+                this._dragProxy.setAttribute("src", this._canvas.toDataURL());
+                this._downloadDirty = false;
+                this._needsPrepareDownload = false;
             }
 
         }
