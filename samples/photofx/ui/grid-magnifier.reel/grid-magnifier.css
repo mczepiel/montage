@@ -32,9 +32,8 @@ POSSIBILITY OF SUCH DAMAGE.
     pointer-events: none;
 }
 
-.GridMagnifier .loupe, .GridMagnifier canvas {
-    -webkit-border-radius: 200px;
-    pointer-events: none;
+.GridMagnifier canvas {
+    -webkit-mask-box-image: url(circle.svg);
 }
 
 .GridMagnifier {
@@ -54,8 +53,7 @@ POSSIBILITY OF SUCH DAMAGE.
     height: 200px;
 
     border: 1px solid hsl(0,0%,80%);
-
-    overflow: hidden;
+    border-radius: 200px;
 }
 
 .GridMagnifier.active {
@@ -65,6 +63,14 @@ POSSIBILITY OF SUCH DAMAGE.
 .GridMagnifier canvas {
     position: static;
     background: white;
+}
+
+.GridMagnifier .gridCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    background: none;
 }
 
 .touch .GridMagnifier {
@@ -81,8 +87,8 @@ POSSIBILITY OF SUCH DAMAGE.
     font-size: x-small;
     border-bottom: none;
 
-    padding-top: 110px;
-    margin-top: -100px;
+    padding-top: 97px;
+    margin-top: -97px;
 
     border-radius: 8px;
     -webkit-box-shadow: 0 4px 6px hsla(0,0%,0%, 0.4);
@@ -110,7 +116,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
     background: hsla(0,0%,80%, 0.8);
 
-    padding: 8px 70px 88px 10px;
+    padding: 8px 57px 71px 10px;
 
     font-size: small;
     border-bottom: none;

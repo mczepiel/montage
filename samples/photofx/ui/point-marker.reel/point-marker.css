@@ -41,10 +41,12 @@ POSSIBILITY OF SUCH DAMAGE.
     border-radius: 20px;
 
     -webkit-transform: rotate(45deg) scale(0.5);
+    -moz-transform: rotate(45deg) scale(0.5);
+    transform: rotate(45deg) scale(0.5);
 }
 
 .PointMarker.selected {
-     -webkit-animation: twist-and-shout 0.2s 2;
+    -webkit-animation: twist-and-shout 0.2s 2;
     -webkit-animation-direction: alternate;
     -webkit-animation-timing-function: linear;
 

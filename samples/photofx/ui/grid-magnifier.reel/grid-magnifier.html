@@ -41,7 +41,8 @@ POSSIBILITY OF SUCH DAMAGE.
                 "properties": {
                     "element": {"#": "GridMagnifier"},
                     "_loupe": {"#": "loupe"},
-                    "_canvas": {"#": "canvas"}
+                    "_canvas": {"#": "canvas"},
+                    "_gridCanvas": {"#": "gridCanvas"}
                 }
             },
 
@@ -85,7 +86,8 @@ POSSIBILITY OF SUCH DAMAGE.
 
     <div data-montage-id="GridMagnifier" class="GridMagnifier">
         <div data-montage-id="loupe" class="loupe">
-            <canvas data-montage-id="canvas" width="200" height="200"></canvas>
+            <canvas data-montage-id="gridCanvas" class="gridCanvas" width="200" height="200"></canvas>
+            <canvas data-montage-id="canvas" class="loupeCanvas" width="200" height="200"></canvas>
         </div>
         <div class="loupeInfo">
             <span data-montage-id="zoomLevel"></span>×

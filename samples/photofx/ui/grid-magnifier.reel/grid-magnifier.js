@@ -47,6 +47,22 @@ exports.GridMagnifier = Montage.create(Component, {
         value: null
     },
 
+    _gridCanvas: {
+        value: null
+    },
+
+    _gridContext: {
+        value: null
+    },
+
+    _zoomChanged: {
+        value: true
+    },
+
+    _imageModified: {
+        value: true
+    },
+
     _sourceCanvas: {
         value: null
     },
@@ -191,6 +207,7 @@ exports.GridMagnifier = Montage.create(Component, {
             }
 
             this._zoomLevels = value;
+            this._zoomChanged = true;
             this.needsDraw = true;
         }
     },
@@ -214,6 +231,7 @@ exports.GridMagnifier = Montage.create(Component, {
             }
 
             this.zoomIndex++;
+            this._zoomChanged = true;
             this.needsDraw = true;
         }
     },
@@ -225,6 +243,7 @@ exports.GridMagnifier = Montage.create(Component, {
             }
 
             this.zoomIndex--;
+            this._zoomChanged = true;
             this.needsDraw = true;
         }
     },
@@ -251,6 +270,7 @@ exports.GridMagnifier = Montage.create(Component, {
 
     handleImagemodified: {
         value: function() {
+            this._imageModified = true;
             this.needsDraw = true;
         }
     },
@@ -272,6 +292,8 @@ exports.GridMagnifier = Montage.create(Component, {
             this._canvas = newCanvas;
 
             this._context = this._canvas.getContext("2d");
+
+            this._gridContext = this._gridCanvas.getContext("2d");
 
             if (this._context.hasOwnProperty("webkitImageSmoothingEnabled")) {
                 this._context.webkitImageSmoothingEnabled = false;
@@ -342,53 +364,33 @@ exports.GridMagnifier = Montage.create(Component, {
                 context = this._context,
                 rowCount = Math.floor(loupeWidth / gridSize),
                 columnCount = Math.floor(loupeHeight / gridSize),
-                x,
-                y;
+                elementStyle = this.element.style;
 
             // Move to the right spot
             if (this.followPointer) {
-                this.element.style.webkitTransform = "translate3d(" + relativePoint.x + "px, " + relativePoint.y + "px , 0)";
+                elementStyle.transform =
+                elementStyle.MozTransform = "translate(" + relativePoint.x + "px, " + relativePoint.y + "px)";
+                elementStyle.webkitTransform = "translate3d(" + relativePoint.x + "px, " + relativePoint.y + "px , 0)";
+
             } else {
-                this.element.style.webkitTransform = "translate3d(0, 0, 0)";
+                elementStyle.transform =
+                elementStyle.MozTransform = "translate(0, 0)";
+                elementStyle.webkitTransform = "translate3d(0, 0, 0)";
             }
 
-            context.clearRect(0, 0, loupeWidth, loupeHeight);
-
-            if (this._supportsImageSmoothingEnabled) {
+            if (window.largeCanvas && this._supportsImageSmoothingEnabled) {
+                this.drawLargeCanvasLoupe(context, zoom, loupeCenterX, loupeCenterY);
+            } else if (this._supportsImageSmoothingEnabled) {
+                context.clearRect(0, 0, loupeWidth, loupeHeight);
                 this.drawCanvasLoupe(context, zoom, loupeCenterX, loupeCenterY);
             } else {
+                context.clearRect(0, 0, loupeWidth, loupeHeight);
                 this.drawManualLoupe(context, gridSize, rowCount, columnCount);
             }
 
-            // Draw Grid lines
-
-            context.strokeStyle = '#000';
-            context.lineWidth   = 1;
-
-            if (zoom >= 10) {
-                context.globalAlpha = 0.1;
-                context.globalCompositeOperation = 'xor';
-
-                context.beginPath();
-
-                for (x = 0; x <= loupeWidth; x += gridSize) {
-                    context.moveTo(x, 0);
-                    context.lineTo(x, loupeHeight);
-                }
-
-                for (y = 0; y <= loupeHeight; y += gridSize) {
-                    context.moveTo(0, y);
-                    context.lineTo(loupeWidth, y);
-                }
-
-                context.stroke();
-                context.closePath();
+            if (this._zoomChanged) {
+                this.drawGrid(this._gridContext, zoom, gridSize, loupeWidth, loupeHeight, columnCount, rowCount);
             }
-
-            // Draw focus rectangle
-            context.globalAlpha = 1;
-            context.globalCompositeOperation = 'source-over';
-            context.strokeRect(Math.floor(columnCount/2) * gridSize, Math.floor(rowCount/2)* gridSize, gridSize, gridSize);
 
         }
     },
@@ -420,15 +422,76 @@ exports.GridMagnifier = Montage.create(Component, {
     },
 
     drawCanvasLoupe: {
-            value: function(context, zoom, loupeCenterX, loupeCenterY) {
+        value: function(context, zoom, loupeCenterX, loupeCenterY) {
 
-                var inverseZoom = zoom * -1,
-                    left = this.x * inverseZoom + loupeCenterX - this._borderLeftWidth,
-                    top = this.y * inverseZoom + loupeCenterY - this._borderTopWidth;
+            var inverseZoom = zoom * -1,
+                left = this.x * inverseZoom + loupeCenterX - this._borderLeftWidth,
+                top = this.y * inverseZoom + loupeCenterY - this._borderTopWidth;
 
-                // TODO I used the splice aspects of drawImage, but it didn't seem to help much
-                context.drawImage(this._sourceCanvas, left, top, this._sourceWidth * zoom, this._sourceHeight * zoom);
-            }
+            // TODO I used the splice aspects of drawImage, but it didn't seem to help much
+            context.drawImage(this._sourceCanvas, left, top, this._sourceWidth * zoom, this._sourceHeight * zoom);
         }
+    },
+
+    drawLargeCanvasLoupe: {
+        value: function(context, zoom, loupeCenterX, loupeCenterY) {
+
+            var inverseZoom = zoom * -1,
+                left = this.x * inverseZoom + loupeCenterX - this._borderLeftWidth,
+                top = this.y * inverseZoom + loupeCenterY - this._borderTopWidth,
+                w,
+                h;
+
+            if (this._imageModified || this._zoomChanged) {
+                w = this._canvas.width = this._sourceWidth * zoom;
+                h = this._canvas.height = this._sourceHeight * zoom;
+                context = this._canvas.getContext("2d");
+                context.webkitImageSmoothingEnabled = false;
+                context.drawImage(this._sourceCanvas, 0, 0, w, h);
+                this._imageModified = false;
+            }
+
+            this._canvas.style.webkitTransform = "translate3d(" +left + "px, " + top + "px , 0)";
+        }
+    },
+
+    drawGrid: {
+        value: function(context, zoom, gridSize, loupeWidth, loupeHeight, columnCount, rowCount) {
+            var x,
+                y;
+
+            context.clearRect(0, 0, loupeWidth, loupeHeight);
+
+            context.strokeStyle = '#000';
+            context.lineWidth   = 1;
+
+            if (zoom >= 10) {
+                context.globalAlpha = 0.1;
+                context.globalCompositeOperation = 'xor';
+
+                context.beginPath();
+
+                for (x = 0; x <= loupeWidth; x += gridSize) {
+                    context.moveTo(x, 0);
+                    context.lineTo(x, loupeHeight);
+                }
+
+                for (y = 0; y <= loupeHeight; y += gridSize) {
+                    context.moveTo(0, y);
+                    context.lineTo(loupeWidth, y);
+                }
+
+                context.stroke();
+                context.closePath();
+            }
+
+            // Draw focus rectangle
+            context.globalAlpha = 1;
+            context.globalCompositeOperation = 'source-over';
+            context.strokeRect(Math.floor(columnCount/2) * gridSize, Math.floor(rowCount/2)* gridSize, gridSize, gridSize);
+
+            this._zoomChanged = false;
+        }
+    }
 
 });
