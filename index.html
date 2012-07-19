@@ -3,14 +3,71 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Montage by mczepiel</title>
+    <title>Montage (mczepiel fork)</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/skin-a.css">
+    <link rel="stylesheet" href="stylesheets/skin-b.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    
+    <script src="./node_modules/montage/montage.js" data-package="."></script>
+    <script type="text/montage-serialization">
+        {
+            "examples": {
+                "prototype": "ui/examples.reel",
+                "properties": {
+                    "element": {"#": "examples"}
+                }
+            },
+
+            "themes": {
+                "prototype": "ui/themes.reel",
+                "properties": {
+                    "element": {"#": "themes"}
+                }
+            },
+
+            "misc": {
+                "prototype": "ui/misc.reel",
+                "properties": {
+                    "element": {"#": "misc"}
+                }
+            },
+
+            "misc": {
+                "prototype": "ui/misc.reel",
+                "properties": {
+                    "element": {"#": "misc"}
+                }
+            },
+
+            "apps": {
+                "prototype": "ui/apps.reel",
+                "properties": {
+                    "element": {"#": "apps"}
+                }
+            },
+
+            "tools": {
+                "prototype": "ui/tools.reel",
+                "properties": {
+                    "element": {"#": "tools"}
+                }
+            },
+
+            "future": {
+                "prototype": "ui/future.reel",
+                "properties": {
+                    "element": {"#": "future"}
+                }
+            }
+        }
+    </script>
+    
   </head>
   <body>
     <div class="wrapper">
@@ -28,16 +85,37 @@
         </ul>
       </header>
       <section>
-        <p><img src="http://mczepiel.github.com/montage/samples/sink/assets/image/montage-logo.png" width="235" height="235" alt="Montage"></p>
 
-<p>Montage is an application framework powered by standard web technologies.</p>
+        <section>
 
-<p>Montage simplifies the development of rich HTML5 applications by providing modular components, real-time two-way data binding, CommonJS dependency management, and many more conveniences.</p>
+        <p>
+            <img src="images/montage-logo.png" width="235" height="235" alt="Montage"></p>
 
-<p>Montage opens a world of opportunity that is only just now available for web developers.</p>
+            <p>Montage is an application framework powered by standard web technologies.</p>
+
+            <p>Montage simplifies the development of rich HTML5 applications by providing
+            modular components, real-time two-way data binding, CommonJS dependency
+            management, and many more conveniences.</p>
+
+            <p>Montage opens a world of opportunity that is only just now available for
+            web developers.</p>
+        </section>
+
+        <section data-montage-id="examples"></section>
+
+        <section data-montage-id="themes"></section>
+
+        <section data-montage-id="misc"></section>
+
+        <section data-montage-id="apps"></section>
+
+        <section data-montage-id="tools"></section>
+
+        <section data-montage-id="future"></section>
+        
       </section>
       <footer>
-        <p>This project is maintained by <a href="https://github.com/mczepiel">mczepiel</a></p>
+        <p>This fork is maintained by <a href="https://github.com/mczepiel">mczepiel</a></p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
