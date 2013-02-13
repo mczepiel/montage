@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Tree Test</title>
+    <script type="text/javascript" src="../../../montage.js" data-package="../../"></script>
+    <script type="text/montage-serialization">
+        {
+            "owner": {
+                "prototype": "ui/tree-test/tree-test",
+                "properties": {
+                    "treeController": {"@": "treeController"}
+                }
+            },
+
+            "treeController": {
+                "prototype": "montage/core/tree-controller",
+                "properties": {
+                    "childrenPath": "children"
+                }
+            },
+
+            "tree": {
+                "prototype": "montage/ui/tree.reel",
+                "properties": {
+                    "element": {"#": "tree"}
+                },
+                "bindings": {
+                    "treeController": {"<-": "@owner.treeController"}
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <h1>Tree Test</h1>
+    <div data-montage-id="tree"></div>
+</body>
+</html>
