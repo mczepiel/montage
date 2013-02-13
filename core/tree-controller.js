@@ -87,8 +87,8 @@ var Node = exports.TreeController = Montage.create(Montage, {
         value: function (childrenPath) {
             this.cancelBinding("children.*");
             this.defineBinding("children.*", {
-                "<-": childrenPath,
-                source: this.object
+                "<-": "object." + childrenPath,
+                source: this
             })
         }
     },
