@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="table-cell.css">
+    <script type="text/montage-serialization">
+    {
+        "owner": {
+            "properties": {
+                "element": {"#": "table-cell"}
+            }
+        },
+
+        "text": {
+            "prototype": "ui/dynamic-text.reel",
+            "properties": {
+                "element": {"#": "text"}
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td data-montage-id="table-cell" class="TableCell">
+                <span data-montage-id="text"></span>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

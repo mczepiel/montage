@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="table.css">
+    <script type="text/montage-serialization">
+    {
+        "owner": {
+            "properties": {
+                "element": {"#": "table"}
+            }
+        },
+
+        "columnHeaderRepetition": {
+            "prototype": "ui/repetition.reel",
+            "properties": {
+                "element": {"#": "columnHeaderRepetition"}
+            },
+            "bindings": {
+                "contentController": {"<-": "@owner.columnHeaderController"}
+            }
+        },
+
+        "columnHeaderLabel": {
+            "prototype": "ui/dynamic-text.reel",
+            "properties": {
+                "element": {"#": "columnHeaderLabel"}
+            },
+            "bindings": {
+                "value": {"<-": "@columnHeaderRepetition.objectAtCurrentIteration"}
+            }
+        },
+
+        "rowRepetition": {
+            "prototype": "ui/repetition.reel",
+            "properties": {
+                "element": {"#": "rowRepetition"}
+            },
+            "bindings": {
+                "contentController": {"<-": "@owner.contentController"}
+            }
+        },
+
+        "columnRepetition": {
+            "prototype": "ui/repetition.reel",
+            "properties": {
+                "element": {"#": "columnRepetition"}
+            },
+            "bindings": {
+                "contentController": {"<-": "@owner.columnHeaderController"},
+                "object": {"<->": "@rowRepetition.objectAtCurrentIteration"}
+            }
+        },
+
+        "cell": {
+            "prototype": "./table-cell.reel",
+            "properties": {
+                "element": {"#": "cell"}
+            },
+            "bindings": {
+                "object": {"<->": "@columnRepetition.object"},
+                "property": {"<-": "@columnRepetition.objectAtCurrentIteration"},
+                "switchValue": {"<-": "@columnRepetition.objectAtCurrentIteration"},
+                "switchComponents": {"<-": "@owner.cellComponents"},
+                "innerTemplate": {"<-": "@owner.innerTemplate"}
+            }
+        }
+
+    }
+    </script>
+</head>
+<body>
+    <table data-montage-id="table" class="Table">
+        <thead>
+            <tr data-montage-id="columnHeaderRepetition">
+                <th><span data-montage-id="columnHeaderLabel"></span></th>
+            </tr>
+        </thead>
+        <tbody data-montage-id="rowRepetition">
+            <tr data-montage-id="columnRepetition">
+                <td data-montage-id="cell"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

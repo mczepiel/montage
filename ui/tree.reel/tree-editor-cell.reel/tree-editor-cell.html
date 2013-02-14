@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="tree.css">
+    <script type="text/montage-serialization">
+        {
+            "owner": {
+                "prototype": "tree-editor-cell.reel",
+                "properties": {
+                    "element": {"#": "treeEditorCell"}
+                }
+            },
+
+            "label": {
+                "prototype": "ui/dynamic-text.reel",
+                "properties": {
+                    "element": {"#": "label"}
+                },
+                "bindings": {
+                    "value": {"<-": "@list.objectAtCurrentIteration.object.label"}
+                }
+            },
+
+            "addChildButton": {
+                "prototype": "ui/button.reel",
+                "properties": {
+                    "element": {"#": "addChildButton"}
+                },
+                "bindings": {
+                    "iteration": {"<-": "@list.objectAtCurrentIteration"}
+                },
+                "listeners": [
+                    {"type": "action", "listener": {"@": "owner"}}
+                ]
+            },
+
+            "removeNodeButton": {
+                "prototype": "ui/button.reel",
+                "properties": {
+                    "element": {"#": "removeNodeButton"}
+                },
+                "bindings": {
+                    "iteration": {"<-": "@list.objectAtCurrentIteration"},
+                    "disabled": {"<-": "!@list.objectAtCurrentIteration.parent"}
+                },
+                "listeners": [
+                    {"type": "action", "listener": {"@": "owner"}}
+                ]
+            }
+        }
+    </script>
+<body>
+
+<div data-montage-id="treeEditorCell">
+    <input data-montage-id="label">
+    <button data-montage-id="addChildButton">+</button>
+    <button data-montage-id="removeNodeButton">-</button>
+</div>
+
+</body>
+</html>

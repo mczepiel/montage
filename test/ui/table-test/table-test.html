@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Table Test</title>
+    <script type="text/javascript" src="../../../montage.js" data-package="../../"></script>
+    <script type="text/montage-serialization">
+        {
+            "owner": {
+                "prototype": "ui/table-test/table-test",
+                "properties": {
+                    "columnHeaderController": {"@": "columnHeaderController"},
+                    "contentController": {"@": "contentController"}
+                }
+            },
+
+            "columnHeaderController": {
+                "prototype": "montage/core/content-controller"
+            },
+
+            "contentController": {
+                "prototype": "montage/core/content-controller"
+            },
+
+            "table": {
+                "prototype": "montage/ui/table.reel",
+                "properties": {
+                    "element": {"#": "table"},
+                    "cellComponents": {
+                        "location": {"@": "locationCell"},
+                        "name": {"@": "nameCell"}
+                    }
+                },
+                "bindings": {
+                    "contentController": {"<-": "@owner.contentController"},
+                    "columnHeaderController": {"<-": "@owner.columnHeaderController"}
+                }
+            },
+
+            "locationCell": {
+                "prototype": "montage/ui/input-text.reel",
+                "properties": {
+                    "element": {"#": "locationCell"}
+                }
+            },
+
+            "nameCell": {
+                "prototype": "montage/ui/dynamic-text.reel",
+                "properties": {
+                    "element": {"#": "nameCell"}
+                }
+            }
+        }
+    </script>
+
+</head>
+<body>
+    <h1>Table Test</h1>
+    <div data-montage-id="table">
+        <span data-montage-id="nameCell"></span>
+        <input type="text" data-montage-id="locationCell">
+    </div>
+</body>
+</html>
