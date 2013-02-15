@@ -637,7 +637,7 @@ var Component = exports.Component = Montage.create(Montage,/** @lends module:mon
             this._newDomContent = value;
             this.needsDraw = true;
 
-            if (this._newDomContent === null) {
+            if (this._newDomContent == null) {
                 this._shouldClearDomContentOnNextDraw = true;
             }
 
@@ -1390,7 +1390,7 @@ var Component = exports.Component = Montage.create(Montage,/** @lends module:mon
 
                 if (contents instanceof Element) {
                     element.appendChild(contents);
-                } else if(contents !== null) {
+                } else if(contents != null) {
                     for (var i = 0, content; (content = contents[i]); i++) {
                         element.appendChild(content);
                     }
